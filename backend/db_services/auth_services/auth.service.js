@@ -20,15 +20,15 @@ module.exports = {
       }
     );
   },
-  getUsersByUserId: (id, callBack) => {
+  getUsersByUserId: (email, callBack) => {
     pool.query(
-      `select * from users_tbl where user_id = ?`,
-      [id],
+      `select * from users_tbl where email = ?`,
+      [email],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
         }
-        return callBack(results[0]);
+        return callBack(null, results[0]);
       }
     );
   },
