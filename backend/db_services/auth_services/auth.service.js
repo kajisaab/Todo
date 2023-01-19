@@ -11,6 +11,7 @@ module.exports = {
         data.email,
         data.password,
         data.number,
+        data.darkmode || false,
       ],
       (error, results, fields) => {
         if (error) {
