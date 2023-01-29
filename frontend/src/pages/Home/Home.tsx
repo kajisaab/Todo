@@ -1,6 +1,6 @@
 import { HomeWrapper } from './HomeStyled';
 import FormContainer from '../../components/FormContainer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { authAPI } from './authFunction';
 import {
@@ -9,7 +9,7 @@ import {
   viewMode,
 } from '../../features/users/userDetailsSlice';
 import { useAppDispatch } from '../../app/hooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 const initialErroState = {
@@ -32,6 +32,7 @@ const initialInputState = {
   gender: '',
 };
 function Home(): JSX.Element {
+  const { page } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -41,18 +42,44 @@ function Home(): JSX.Element {
   const [errorState, setErrorState] = useState<any>({
     ...initialErroState,
   });
-  const [authPage, setAuthPage] = useState('Sign In');
+  const [authPage, setAuthPage] = useState('Sign Up');
+
+  useEffect(() => {
+    if (page) {
+      setAuthPage(page);
+    }
+  }, [page]);
+
+  const OtpVerifyNavigate = () => {
+    navigate(`/verify-otp/${inputValue.email}`);
+  };
 
   const onSuccess = (res: object) => {
-    enqueueSnackbar('Successfully Created Accoudn', {
-      variant: 'success',
-      preventDuplicate: true,
-    });
-    setAuthPage('Sign In');
+    OtpVerifyNavigate();
     setInputValue({ ...initialInputState });
   };
 
+  const onOTPResendSuccess = () => {
+    OtpVerifyNavigate();
+  };
+
+  const onOTPResendFailure = () => {
+    enqueueSnackbar('Could not resend OTP', {
+      variant: 'error',
+      preventDuplicate: true,
+    });
+  };
+
   const onFailure = (err: any) => {
+    if (err.response.data === 'User is not verified') {
+      authAPI(
+        'resend-otp',
+        { email: inputValue.email },
+        onOTPResendSuccess,
+        onOTPResendFailure
+      );
+      return;
+    }
     enqueueSnackbar(err.response.data, {
       variant: 'error',
       preventDuplicate: true,
@@ -68,6 +95,13 @@ function Home(): JSX.Element {
     dispatch(tokenRegistration(res.data.token));
     dispatch(userDetails(res.data.userDetails));
     navigate('/landing');
+  };
+
+  const onFindPasswordSuccess = (res: { data: string }) => {
+    enqueueSnackbar(res?.data, {
+      variant: 'success',
+      preventDuplicate: true,
+    });
   };
 
   const auth = (type: string) => {
@@ -102,13 +136,26 @@ function Home(): JSX.Element {
           });
       return;
     }
-    if (authPage !== 'Sign Up') {
+    if (authPage === 'Sign In') {
       inputValue.email && !errorState.email && inputValue.password
         ? auth('signin')
         : setErrorState({
             ...errorState,
             email: errorState.email || inputValue.email.length === 0,
             password: inputValue.password.length === 0,
+          });
+    }
+    if (authPage === 'Find Your Account') {
+      inputValue.email && !errorState.email
+        ? authAPI(
+            'find-account',
+            { email: inputValue.email },
+            onFindPasswordSuccess,
+            onFailure
+          )
+        : setErrorState({
+            ...errorState,
+            email: errorState.email || inputValue.email.length === 0,
           });
     }
   };
@@ -124,6 +171,21 @@ function Home(): JSX.Element {
           errorState={errorState}
           setErrorState={setErrorState}
         />
+        {authPage === 'Sign Up' && (
+          <div className='forgot_password_container'>
+            <span onClick={() => setAuthPage('Sign In')}>
+              Already have account ?
+            </span>
+          </div>
+        )}
+        {authPage !== 'Sign Up' && (
+          <div className='forgot_password_container'>
+            <span onClick={() => setAuthPage('Find Your Account')}>
+              Forgot Password ?
+            </span>
+          </div>
+        )}
+
         <Button onClick={() => onSubmit()} title={authPage} />
       </div>
     </HomeWrapper>

@@ -25,6 +25,23 @@ const HomeWrapper = styled.div<Props>`
     flex-direction: column;
     gap: 10px;
   }
+
+  .forgot_password_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
+
+    span {
+      cursor: pointer;
+      color: blue;
+    }
+
+    span:hover {
+      color: red;
+    }
+  }
 `;
 
 export { HomeWrapper };

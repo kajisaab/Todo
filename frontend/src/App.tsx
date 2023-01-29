@@ -6,6 +6,9 @@ import Landing from './pages/Landing';
 import Todo from './pages/Todo';
 import PageNotFound from './pages/404Page';
 import { ProtectedRoutes } from './app/PrivateRoute';
+import ResetPassword from './pages/ResetPassword';
+import OtpVerification from './pages/OtpVerification';
+
 function App(): JSX.Element {
   const { darkMode } = useAppSelector((state) => state.userDetails);
   return (
@@ -13,7 +16,12 @@ function App(): JSX.Element {
       <MyGlobalStyle darkMode={darkMode} />
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/:page?' element={<Home />} />
+          <Route path='/verify-otp/:email' element={<OtpVerification />} />
+          <Route
+            path={`/reset-password/:id/:token`}
+            element={<ResetPassword />}
+          />
           <Route element={<ProtectedRoutes />}>
             <Route path='/landing' element={<Landing />} />
             <Route path='/todo' element={<Todo />} />

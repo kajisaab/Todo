@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Logout from '../../app/logout';
 import { useSnackbar } from 'notistack';
+import ThemeToggle from '../../components/ThemeToggle';
 
 function Landing(): JSX.Element {
   const { darkMode } = useAppSelector((state) => state.userDetails);
@@ -16,6 +17,9 @@ function Landing(): JSX.Element {
 
   return (
     <LandingWrapper darkMode={darkMode}>
+      <div className='toggle_section'>
+        <ThemeToggle />
+      </div>
       <Link to='/todo' style={{ textDecoration: 'none', color: '#fff' }}>
         <div className='card_layout'>Todo Application</div>
       </Link>
@@ -23,9 +27,8 @@ function Landing(): JSX.Element {
         to='money-manager'
         style={{ textDecoration: 'none', color: '#fff' }}
       >
-        <div className='card_layout'>Money Manager</div>
+        <div className='card_layout'>Expense Tracker</div>
       </Link>
-
       <button
         onClick={() =>
           Logout({ dispatch: dispatch, enqueueSnackbar: enqueueSnackbar })

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserDetailState {
   darkMode: boolean;
-  userDetails: object;
+  userDetails: any;
   token: string;
   status: 'idle' | 'loading' | 'failed';
 }
@@ -26,7 +26,7 @@ export const userDetailsSlice = createSlice({
       state.token = action.payload;
     },
 
-    userDetails: (state, action: PayloadAction<object>) => {
+    userDetails: (state, action: PayloadAction<any>) => {
       state.userDetails = { ...action.payload };
     },
   },

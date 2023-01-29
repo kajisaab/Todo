@@ -41,6 +41,10 @@ const signin: InputInterface[] = [
   { field: 'password', type: 'password', title: 'Password', required: true },
 ];
 
+const forgotPassword: InputInterface[] = [
+  { field: 'email', type: 'email', title: 'Email', required: true },
+];
+
 const genderOption: {
   label: string | number;
   value: string | number;
@@ -120,7 +124,12 @@ function FormContainer(props: Props): JSX.Element {
   };
   return (
     <FormContainerwrapper type={type}>
-      {(type === 'Sign Up' ? signup : signin).map((field, ind) =>
+      {(type === 'Sign Up'
+        ? signup
+        : type === 'Sign In'
+        ? signin
+        : forgotPassword
+      ).map((field, ind) =>
         field.type !== 'select' ? (
           <InputField
             key={ind}

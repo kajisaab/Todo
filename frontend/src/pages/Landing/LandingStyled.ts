@@ -11,6 +11,12 @@ const LandingWrapper = styled.div<Props>`
   justify-content: center;
   gap: 5rem;
 
+  .toggle_section {
+    position: absolute;
+    right: 80px;
+    top: 50px;
+  }
+
   .card_layout {
     min-height: 13em;
     min-width: 18em;
@@ -28,21 +34,23 @@ const LandingWrapper = styled.div<Props>`
     padding: 20px;
     backdrop-filter: blur(25px);
     transition: 0.5s;
+    font-weight: bold;
+    box-shadow: -15px 30px 50px rgba(0, 0, 0, 0.5);
+    color: ${(props) =>
+      props.darkMode ? props.theme.dark.text : props.theme.light.text};
 
     &:hover {
       transform: scale(1.15);
       z-index: 10000;
-      font-weight: bold;
       ${(props) =>
         props.darkMode
           ? `
       background-color: #b7b0b0; 
-      box-shadow: -15px 30px 50px rgba(0,0,0,0.5);
-      color: #212121;
+      color: ${props.theme.light.text};
       `
           : `
       background-color: #212121; 
-      color: #ffffff;
+      color: ${props.theme.dark.text};
       `}
     }
   }
