@@ -116,10 +116,10 @@ function FormContainer(props: Props): JSX.Element {
   };
 
   const onChangeEvent = (e: any, type: string) => {
-    const { value } = e.target;
-    setInputValue({ ...inputValue, [type]: value });
+    const { value, name } = e.target;
+    setInputValue({ ...inputValue, [name]: value });
     if (value.length > 0) {
-      setErrorState({ ...errorState, [type]: false });
+      setErrorState({ ...errorState, [name]: false });
     }
   };
   return (
@@ -143,16 +143,6 @@ function FormContainer(props: Props): JSX.Element {
             errorMessage={
               Object.values(errorState).includes(true) &&
               errorMessage[field.field]
-              // ? field.field === 'password'
-              //   ? inputValue[field.field].length === 0
-              //     ? ErrorMessages[field.field].blank
-              //     : ErrorMessages[field.field].underCriteria
-              //   : field.field === 'repassword'
-              //   ? inputValue[field.field] !== inputValue['password']
-              //     ? ErrorMessages[field.field].notmatching
-              //     : ErrorMessages[field.field].blank
-              //   : ErrorMessages[field.field]
-              // : ''
             }
             required={field.required}
             onChange={(e: Event & { target: HTMLInputElement }, type: string) =>

@@ -185,8 +185,13 @@ function Home(): JSX.Element {
             </span>
           </div>
         )}
-
-        <Button onClick={() => onSubmit()} title={authPage} />
+        <div className='button_section'>
+          <Button
+            onClick={() => onSubmit()}
+            title={authPage}
+            width={authPage === 'Find Your Account' ? 200 : 120}
+          />
+        </div>
       </div>
     </HomeWrapper>
   );

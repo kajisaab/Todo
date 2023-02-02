@@ -2,3 +2,24 @@
   font-family: Poppins;
   src: url(./fonts/Poppins-Regular.ttf);
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  cursor: pointer;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #151587;
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #6363d5;
+}

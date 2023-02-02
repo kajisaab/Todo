@@ -24,6 +24,8 @@ const useAuth = () => {
 };
 
 export const ProtectedRoutes = () => {
+  const dispatch = useAppDispatch();
   const authenticated = useAuth();
+  !authenticated && dispatch(viewMode(false));
   return authenticated ? <Outlet /> : <Navigate to='/' />;
 };

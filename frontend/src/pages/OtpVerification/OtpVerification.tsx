@@ -2,9 +2,10 @@ import { OtpVerifyWrapper } from './OtpVerificationStyled';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { authAPI } from '../Home/authFunction';
 import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 const padTime = (time: any) => {
   return String(time).length === 1 ? `0${time}` : `${time}`;
@@ -19,6 +20,7 @@ const format = (time: any) => {
 
 function OtpVerification() {
   const { email } = useParams();
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [otpValue, setOtpvalue] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
@@ -75,7 +77,25 @@ function OtpVerification() {
     );
   };
 
-  const onCLick = () => alert(`hit api for otp verify with ${email} email`);
+  const onCLick = async () => {
+    const data = {
+      email: email,
+      otp: Number(otpValue),
+    };
+    try {
+      const response = await axios.post<any, any>(`auth/verify-OTP`, data);
+      enqueueSnackbar(response.data, {
+        variant: 'success',
+        preventDuplicate: true,
+      });
+      navigate('/Sign In');
+    } catch (err) {
+      enqueueSnackbar('OTP does not match', {
+        variant: 'error',
+        preventDuplicate: true,
+      });
+    }
+  };
   return (
     <OtpVerifyWrapper>
       <div className='center_container'>
